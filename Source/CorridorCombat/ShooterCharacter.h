@@ -6,10 +6,6 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
-#ifndef PRINT
-#define PRINT(text) UE_LOG(LogTemp, Error, TEXT(#text))
-#endif
-
 
 UCLASS()
 class CORRIDORCOMBAT_API AShooterCharacter : public ACharacter
