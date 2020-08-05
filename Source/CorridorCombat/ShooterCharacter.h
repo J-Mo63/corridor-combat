@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Jonathan Moallem 2020
 
 #pragma once
 
@@ -6,24 +6,51 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+#ifndef PRINT
+#define PRINT(text) UE_LOG(LogTemp, Error, TEXT(#text))
+#endif
+
+
 UCLASS()
 class CORRIDORCOMBAT_API AShooterCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+
+    // Constructor & public default functions
+
 	AShooterCharacter();
 
+    virtual void Tick(float DeltaTime) override;
+
+
+    // Input binding functions
+
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    void MoveForward(float AxisValue);
+
+    void MoveRight(float AxisValue);
+
+    void LookUp(float AxisValue);
+
+    void LookRight(float AxisValue);
+
 protected:
-	// Called when the game starts or when spawned
+
+    // Protected default functions
+
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+private:
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    // Player input fields
+
+    UPROPERTY(EditAnywhere, Category = "Player Input")
+    float LookSpeed = 50.f;
+
+    UPROPERTY(EditAnywhere, Category = "Player Input")
+    float MoveSpeed = 100.f;
 
 };
