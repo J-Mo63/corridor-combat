@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+// Forward declarations
+class AGun;
 
 UCLASS()
 class CORRIDORCOMBAT_API AShooterCharacter : public ACharacter
@@ -20,18 +22,7 @@ public:
 
     virtual void Tick(float DeltaTime) override;
 
-
-    // Input binding functions
-
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-    void MoveForward(float AxisValue);
-
-    void MoveRight(float AxisValue);
-
-    void LookUp(float AxisValue);
-
-    void LookRight(float AxisValue);
 
 protected:
 
@@ -41,6 +32,14 @@ protected:
 
 private:
 
+    // Components
+
+    UPROPERTY(EditDefaultsOnly, Category = "Combat")
+    TSubclassOf<AGun> GunClass;
+
+    UPROPERTY()
+    AGun* Gun;
+
     // Player input fields
 
     UPROPERTY(EditAnywhere, Category = "Player Input")
@@ -48,5 +47,19 @@ private:
 
     UPROPERTY(EditAnywhere, Category = "Player Input")
     float MoveSpeed = 100.f;
+
+    // Combat functions
+
+    void Shoot();
+
+    // Input binding functions
+
+    void MoveForward(float AxisValue);
+
+    void MoveRight(float AxisValue);
+
+    void LookUp(float AxisValue);
+
+    void LookRight(float AxisValue);
 
 };

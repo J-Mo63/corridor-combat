@@ -3,6 +3,8 @@
 
 #include "ShooterCharacter.h"
 #include "Components/InputComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Gun.h"
 
 
 AShooterCharacter::AShooterCharacter()
@@ -14,6 +16,15 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+    Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+    GetMesh()->HideBoneByName(TEXT("weapon_r"), PBO_None);
+
+    if (Gun)
+    {
+        Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("weapon_socket"));
+        Gun->SetOwner(this);
+    }
 }
 
 
@@ -32,7 +43,18 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AShooterCharacter::LookUp);
     PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &AShooterCharacter::LookRight);
     PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
+    PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AShooterCharacter::Shoot);
 }
+
+
+void AShooterCharacter::Shoot()
+{
+    if (Gun)
+    {
+        Gun->PullTrigger(GetController());
+    }
+}
+
 
 void AShooterCharacter::MoveForward(float AxisValue)
 {

@@ -31,6 +31,8 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::PullTrigger(AController* Controller)
 {
+    if (!Controller) { return; }
+
     // Run muzzle flash effect on the socket
     UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
 
