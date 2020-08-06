@@ -24,6 +24,14 @@ public:
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+    virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+                             class AController* EventInstigator, AActor* DamageCauser) override;
+
+    // Pure functions
+
+    UFUNCTION(BlueprintPure)
+    bool IsDead() const;
+
 protected:
 
     // Protected default functions
@@ -39,6 +47,13 @@ private:
 
     UPROPERTY()
     AGun* Gun;
+
+    // Health fields
+
+    UPROPERTY(EditAnywhere, Category = "Health")
+    float MaxHealth = 100.f;
+
+    float CurrentHealth = 0.f;
 
     // Player input fields
 

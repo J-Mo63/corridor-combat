@@ -49,4 +49,7 @@ private:
 
     UPROPERTY(EditAnywhere, Category = "Combat")
     float MaxRange = 1000.f;
+
+    UPROPERTY(EditAnywhere, Category = "Combat")
+    float Damage = 10.f;
 };

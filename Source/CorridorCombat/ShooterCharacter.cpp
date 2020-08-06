@@ -10,6 +10,8 @@
 AShooterCharacter::AShooterCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+    CurrentHealth = MaxHealth;
 }
 
 
@@ -31,6 +33,21 @@ void AShooterCharacter::BeginPlay()
 void AShooterCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+
+float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+                                    class AController* EventInstigator, AActor* DamageCauser)
+{
+    DamageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+    CurrentHealth -= FMath::Min(CurrentHealth, DamageAmount);
+    return CurrentHealth;
+}
+
+
+bool AShooterCharacter::IsDead() const
+{
+    return CurrentHealth <= 0;
 }
 
 

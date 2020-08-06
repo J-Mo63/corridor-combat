@@ -4,8 +4,6 @@
 #include "Gun.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
-#include "CorridorCombat.h"
 
 
 AGun::AGun()
@@ -46,7 +44,15 @@ void AGun::PullTrigger(AController* Controller)
 
     if (bHit)
     {
-        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint,
-                                                 StartRotation.GetInverse());
+        FRotator ImpactDirection = StartRotation.GetInverse();
+        AActor* HitActor = Hit.GetActor();
+        if (HitActor)
+        {
+            FPointDamageEvent DamageEvent = FPointDamageEvent(Damage, Hit, ImpactDirection.Vector(), nullptr);
+            HitActor->TakeDamage(Damage, DamageEvent, Controller, this);
+        }
+
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect,
+                                                 Hit.ImpactPoint, ImpactDirection);
     }
 }
