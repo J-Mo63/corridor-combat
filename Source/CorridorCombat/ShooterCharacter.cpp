@@ -12,14 +12,14 @@
 AShooterCharacter::AShooterCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-    CurrentHealth = MaxHealth;
 }
 
 
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+    CurrentHealth = MaxHealth;
 
     Gun = GetWorld()->SpawnActor<AGun>(GunClass);
     GetMesh()->HideBoneByName(TEXT("weapon_r"), PBO_None);
@@ -46,15 +46,14 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 
     if (IsDead())
     {
-        DetachFromControllerPendingDestroy();
-        GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
         ACorridorCombatGameModeBase* GameMode = Cast<ACorridorCombatGameModeBase>(GetWorld()->GetAuthGameMode());
-
         if (GameMode)
         {
             GameMode->PawnKilled(this);
         }
+
+        DetachFromControllerPendingDestroy();
+        GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     }
 
     return CurrentHealth;
@@ -64,6 +63,11 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 bool AShooterCharacter::IsDead() const
 {
     return CurrentHealth <= 0;
+}
+
+float AShooterCharacter::GetHealthPercent() const
+{
+    return CurrentHealth / MaxHealth;
 }
 
 
