@@ -29,7 +29,9 @@ public:
     virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
                              class AController* EventInstigator, AActor* DamageCauser) override;
 
-    // Pure functions
+    // Public methods
+
+    void Shoot();
 
     UFUNCTION(BlueprintPure)
     bool IsDead() const;
@@ -64,10 +66,6 @@ private:
 
     UPROPERTY(EditAnywhere, Category = "Player Input")
     float MoveSpeed = 100.f;
-
-    // Combat methods
-
-    void Shoot();
 
     // Input binding methods
 
