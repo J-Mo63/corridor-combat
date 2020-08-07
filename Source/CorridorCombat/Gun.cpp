@@ -4,6 +4,7 @@
 #include "Gun.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
 
 
 AGun::AGun()
@@ -33,22 +34,12 @@ void AGun::PullTrigger(AController* Controller)
 
     // Run muzzle flash effect on the socket
     UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+    UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));
 
-    FVector StartLocation;
     FRotator StartRotation;
-    Controller->GetPlayerViewPoint(OUT StartLocation, OUT StartRotation);
-    FVector EndLocation = StartLocation + StartRotation.Vector() * MaxRange;
-
-
-    FCollisionQueryParams QueryParams;
-    QueryParams.AddIgnoredActor(this);
-    QueryParams.AddIgnoredActor(GetOwner());
-
     FHitResult Hit;
-    bool bHit = GetWorld()->LineTraceSingleByChannel(OUT Hit, StartLocation, EndLocation,
-                                                     ECC_GameTraceChannel1, QueryParams);
 
-    if (bHit)
+    if (GetGunTrace(Controller, OUT StartRotation, OUT Hit))
     {
         FRotator ImpactDirection = StartRotation.GetInverse();
         AActor* HitActor = Hit.GetActor();
@@ -58,7 +49,21 @@ void AGun::PullTrigger(AController* Controller)
             HitActor->TakeDamage(Damage, DamageEvent, Controller, this);
         }
 
-        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect,
-                                                 Hit.ImpactPoint, ImpactDirection);
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint, ImpactDirection);
+        UGameplayStatics::SpawnSoundAtLocation(GetWorld(), MuzzleSound, Hit.ImpactPoint);
     }
+}
+
+bool AGun::GetGunTrace(AController* Controller, OUT FRotator& StartRotation, OUT FHitResult& Hit)
+{
+    FVector StartLocation;
+    Controller->GetPlayerViewPoint(OUT StartLocation, OUT StartRotation);
+    FVector EndLocation = StartLocation + StartRotation.Vector() * MaxRange;
+
+
+    FCollisionQueryParams QueryParams;
+    QueryParams.AddIgnoredActor(this);
+    QueryParams.AddIgnoredActor(GetOwner());
+
+    return GetWorld()->LineTraceSingleByChannel(OUT Hit, StartLocation, EndLocation,ECC_GameTraceChannel1, QueryParams);
 }

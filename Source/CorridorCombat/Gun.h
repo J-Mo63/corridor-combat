@@ -46,6 +46,12 @@ private:
     UPROPERTY(EditAnywhere)
     UParticleSystem* ImpactEffect;
 
+    UPROPERTY(EditAnywhere)
+    USoundBase* MuzzleSound;
+
+    UPROPERTY(EditAnywhere)
+    USoundBase* ImpactSound;
+
     // Fields
 
     UPROPERTY(EditAnywhere, Category = "Combat")
@@ -53,4 +59,8 @@ private:
 
     UPROPERTY(EditAnywhere, Category = "Combat")
     float Damage = 10.f;
+
+    // Helper methods
+
+    bool GetGunTrace(AController* Controller, OUT FRotator& StartRotation, OUT FHitResult& Hit);
 };
