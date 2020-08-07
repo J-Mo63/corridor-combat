@@ -3,14 +3,38 @@
 
 #include "KillEmAllGameMode.h"
 #include "Kismet/GameplayStatics.h"
-#include "Engine/World.h"
-#include "CorridorCombat.h"
+#include "EngineUtils.h"
+#include "GameFramework/Controller.h"
+#include "ShooterAIController.h"
 
 
 void AKillEmAllGameMode::PawnKilled(APawn* DeadPawn)
 {
-    //APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    //Controller->GameHasEnded();
+    Super::PawnKilled(DeadPawn);
 
-    PRINT("A pawn was killed")
+    if (!DeadPawn) { return; }
+
+    AController* Controller = DeadPawn->GetController();
+
+    if (Controller && Controller->IsPlayerController())
+    {
+        EndGame(false);
+    }
+    else
+    {
+
+        for (AShooterAIController* AiController : TActorRange<AShooterAIController>(GetWorld()))
+        {
+            if (AiController && !AiController->IsDead()) { return; }
+        }
+        EndGame(true);
+    }
+}
+
+void AKillEmAllGameMode::EndGame(bool bIsPlayerWinner)
+{
+    for (AController* Controller : TActorRange<AController>(GetWorld()))
+    {
+        Controller->GameHasEnded(Controller->GetPawn(), Controller->IsPlayerController() && bIsPlayerWinner);
+    }
 }

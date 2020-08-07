@@ -18,6 +18,10 @@ public:
 
     virtual void Tick(float DeltaTime) override;
 
+	// Public functions
+
+	bool IsDead() const;
+
 protected:
 
     // Protected default methods
