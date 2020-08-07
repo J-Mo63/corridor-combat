@@ -3,3 +3,7 @@
 
 #include "CorridorCombatGameModeBase.h"
 
+
+void ACorridorCombatGameModeBase::PawnKilled(APawn* DeadPawn)
+{
+}

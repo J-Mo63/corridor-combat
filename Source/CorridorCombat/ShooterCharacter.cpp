@@ -6,6 +6,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
+#include "CorridorCombatGameModeBase.h"
 
 
 AShooterCharacter::AShooterCharacter()
@@ -47,6 +48,13 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
     {
         DetachFromControllerPendingDestroy();
         GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+        ACorridorCombatGameModeBase* GameMode = Cast<ACorridorCombatGameModeBase>(GetWorld()->GetAuthGameMode());
+
+        if (GameMode)
+        {
+            GameMode->PawnKilled(this);
+        }
     }
 
     return CurrentHealth;
