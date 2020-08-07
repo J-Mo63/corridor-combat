@@ -30,17 +30,4 @@ void AShooterAIController::BeginPlay()
 void AShooterAIController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    if (!Player) { return; }
-
-    if (LineOfSightTo(Player))
-    {
-        BlackboardComponent->SetValueAsVector(TEXT("PlayerLocation"), Player->GetActorLocation());
-        BlackboardComponent->SetValueAsVector(TEXT("LastKnownPlayerLocation"), Player->GetActorLocation());
-    }
-    else
-    {
-        BlackboardComponent->ClearValue(TEXT("PlayerLocation"));
-    }
-
 }
