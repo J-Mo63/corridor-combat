@@ -6,8 +6,10 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+
 // Forward declarations
 class AGun;
+
 
 UCLASS()
 class CORRIDORCOMBAT_API AShooterCharacter : public ACharacter
@@ -16,7 +18,7 @@ class CORRIDORCOMBAT_API AShooterCharacter : public ACharacter
 
 public:
 
-    // Constructor & public default functions
+    // Constructor & public default methods
 
 	AShooterCharacter();
 
@@ -34,7 +36,7 @@ public:
 
 protected:
 
-    // Protected default functions
+    // Protected default methods
 
 	virtual void BeginPlay() override;
 
@@ -63,11 +65,11 @@ private:
     UPROPERTY(EditAnywhere, Category = "Player Input")
     float MoveSpeed = 100.f;
 
-    // Combat functions
+    // Combat methods
 
     void Shoot();
 
-    // Input binding functions
+    // Input binding methods
 
     void MoveForward(float AxisValue);
 

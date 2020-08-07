@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Gun.generated.h"
 
+
 UCLASS()
 class CORRIDORCOMBAT_API AGun : public AActor
 {
